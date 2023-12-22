@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from sklearn.model_selection import train_test_split
 from sklearn import tree
 import seaborn as sns
@@ -57,7 +58,6 @@ def main():
 
     clf = tree.DecisionTreeClassifier()
     clf = clf.fit(X_train, y_train)
-
     color_map = {"fly_ball": "orange",
                  "ground_ball": "green",
                  "line_drive": "yellow",
@@ -73,7 +73,6 @@ def main():
     yellow_yvalues = [X_train[i][1] for i in range(len(X_train)) if color_map[y_train[i]] == "yellow"]
 
     plt.grid(True)
-    #plt.scatter(x_values, y_values, c=color_array, s=50, edgecolors='k', linewidth=0.5)
     plt.title("Batted Ball Types vs. Exit Velocity and Launch Angle")
     plt.xlabel("Exit Velocity (mph)")
     plt.ylabel("Launch Angle (deg)")
@@ -88,12 +87,18 @@ def main():
     color_array = [color_map[y_pred[i]] for i in range(len(y_pred))]
 
     accuracy = (accuracy_score(y_test, y_pred) * 100)
-    print(f"Accuracy: {accuracy:.1f}%") 
+    print(f"Model Accuracy: {accuracy:.1f}%") 
 
+    # Scatter plot overlay (15% test set data)
     plt.scatter(x_values, y_values, c=color_array, s=2, edgecolors='k', linewidth=0.25)
-    plt.show()
+    blue_dot_legend = Line2D([0], [0], marker='o', color='w', markerfacecolor='blue', markersize=10)
+    orange_dot_legend = Line2D([0], [0], marker='o', color='w', markerfacecolor='orange', markersize=10)
+    yellow_dot_legend = Line2D([0], [0], marker='o', color='w', markerfacecolor='yellow', markersize=10)
+    green_dot_legend = Line2D([0], [0], marker='o', color='w', markerfacecolor='green', markersize=10)
 
-    
+    # Create a legend with custom handles and labels
+    plt.legend([blue_dot_legend, orange_dot_legend, yellow_dot_legend, green_dot_legend], ['Popup', 'Flyball', 'Line Drive', 'Grounder'])
+    plt.show()
 
 if __name__ == "__main__":
     main()
